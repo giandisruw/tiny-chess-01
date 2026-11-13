@@ -40,6 +40,22 @@ Entry for the make.fun bounty "Build the strongest chess engine in 4 KB of Pytho
 - Practice trials vs the local env server (trial-0 gauntlet): see NOTES.md.
   Best result: v5 @ 120k, Trial H, 8.5/16 (~1,433 Elo).
 
+## Development and validation
+
+- v5 is an eval-optimized rewrite of v2 (same eval values and best moves
+  on test positions), built to run the same search faster: 120,000 nodes
+  in ~2.85 s/move vs ~4 s for v2 (~45% faster).
+- Trial G first ran v5 at a 160k node budget and dropped to 5.5/16
+  (~1,299 Elo); Trial H isolated the cause by re-running the same engine
+  at 120k nodes on the same trial-0 gauntlet: **7 won, 3 drawn, 6 lost
+  (8.5/16, ~1,433 Elo)** — exactly tied with v2, with identical
+  per-opponent splits. The 160k budget, not the eval, was the problem.
+- Validation: perft on 6 standard positions (depths 1-3, all exact),
+  mate-in-1 found, stalemate = 0 legal moves, deterministic (Trial H
+  games 1-9 reproduced exactly across two runs).
+- Readable source: `main_min7_120k.py`; `main.py` is the packed build
+  (3,856 bytes, limit 4,096). Full trial history in NOTES.md.
+
 ## License
 
 MIT. See LICENSE.
